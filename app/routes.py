@@ -2,6 +2,10 @@ from flask import request, jsonify, render_template
 from google.cloud import firestore
 from app.qr_utils import generate_qr_code
 from app.models import add_session
+from google.cloud import storage
+from datetime import datetime
+
+BUCKET_NAME = "qr-attendance-bucket"
 
 db = firestore.Client()  # Initialize Firestore client
 
@@ -23,7 +27,8 @@ def setup_routes(app):
             return jsonify({"error": "Missing required fields"}), 400
         
         # Add session to Firestore
-        add_session(session_id, course_name, date)
+        ### Commented bc firestone isn't set up yet
+        #add_session(session_id, course_name, date)
         
         # Generate QR code
         response, status = generate_qr_code(session_id)
@@ -31,7 +36,21 @@ def setup_routes(app):
     
     @app.route('/attendance/form/<session_id>', methods=['GET'])
     def attendance_form(session_id):
-        return render_template('attendance_form.html', session_id=session_id)
+        return render_template('attendance_form.html', current_date = session_id.split("session-")[1])
+
+    @app.route('/qrCode', methods=['GET'])
+    def display_qrCode():
+        try:
+            current_date = datetime.now().strftime('%Y-%m-%d')
+
+            session_id = f"session-{current_date}"
+            
+            qr_url = f"https://storage.googleapis.com/qr-attendance-bucket-griffin/{session_id}.png"
+            
+            return render_template('qrCode.html', qr_url=qr_url, session_id=session_id, current_date=current_date)
+        
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 
     @app.route('/submit_attendance', methods=['POST'])
     def submit_attendance():

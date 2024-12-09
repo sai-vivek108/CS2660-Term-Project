@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,37 +12,44 @@
             padding-bottom: 40px;
             background-color: #f5f5f5;
         }
+
         .container {
             width: auto;
             max-width: 680px;
             padding: 15px;
         }
+
         .footer {
             padding-top: 15px;
             text-align: center;
         }
     </style>
 </head>
+
 <body>
     <div class="container text-center">
         <h1>Welcome to the Session Attendance Tracker</h1>
         <p class="lead">Easily generate QR codes for your sessions and track attendance efficiently.</p>
-        
+
         <div class="row mt-4">
             <div class="col">
-                <a href="/generate" class="btn btn-primary">Generate QR Code</a>
+                <button id="generateQRButton" class="btn btn-primary">Generate QR Code</button>
             </div>
             <div class="col">
-                <a href="/attendance/form/" class="btn btn-success">Submit Attendance</a>
+                <a href="/qrCode" class="btn btn-primary">Show QR Code</a>
+            </div>
+            <div class="col">
+                <a id="submitAttendanceButton" href="#" class="btn btn-success">Submit Attendance</a>
             </div>
         </div>
-        
+
         <div class="mt-5">
-            <p>This tool allows instructors to generate QR codes for class sessions and students to submit their attendance by scanning these codes.</p>
+            <p>This tool allows instructors to generate QR codes for class sessions and students to submit their
+                attendance by scanning these codes.</p>
             <p>Manage sessions and view attendance records through the interface.</p>
         </div>
     </div>
-    
+
     <div class="footer">
         <p>&copy; 2024 Session Attendance Tracker</p>
     </div>
@@ -49,5 +57,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
+
 </html>

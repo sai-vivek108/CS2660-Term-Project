@@ -2,6 +2,7 @@ import qrcode
 from datetime import datetime
 from google.cloud import storage
 import os
+import tempfile
 
 BUCKET_NAME = "qr-attendance-bucket"
 
@@ -17,7 +18,7 @@ def generate_qr_code(session_id):
         
         # session_id = f"session-{datetime.now().strftime('%Y-%m-%d')}"
         # this needs to direct the student to the attendance form.
-        qr_content = f"https://storage.googleapis.com/{BUCKET_NAME}/{session_id}.png"
+        qr_content = f"http://127.0.0.1:5000/attendance/form/{session_id}"
 
         # Generate QR code
         qr = qrcode.QRCode(version=1, box_size=10, border=4)
@@ -26,15 +27,28 @@ def generate_qr_code(session_id):
         img = qr.make_image(fill="black", back_color="white")
 
         # Save the QR code image to a temporary file
-        qr_file_path = f"/tmp/{session_id}.png"
-        img.save(qr_file_path)
+        # qr_file_path = f"/tmp/{session_id}.png"
+        # img.save(qr_file_path)
 
-        # Upload the QR code to Cloud Storage
-        bucket = storage_client.bucket(BUCKET_NAME)
-        blob = bucket.blob(f"{session_id}.png")
-        blob.upload_from_filename(qr_file_path)
+        # # Upload the QR code to Cloud Storage
+        # bucket = storage_client.bucket(BUCKET_NAME)
+        # blob = bucket.blob(f"{session_id}.png")
+        # blob.upload_from_filename(qr_file_path)
 
-        return f"QR Code generated: {blob.public_url}", 200
+        # return f"QR Code generated: {blob.public_url}", 200
+
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp_file:
+            qr_file_path = tmp_file.name  # Get the file path from tempfile
+
+            # Save the QR code image to the temporary file
+            img.save(qr_file_path)
+
+            # Upload the QR code to Cloud Storage
+            bucket = storage_client.bucket(BUCKET_NAME)
+            blob = bucket.blob(f"{session_id}.png")
+            blob.upload_from_filename(qr_file_path)
+
+            return f"QR Code generated successfully: {blob.public_url}", 200
 
     except Exception as e:
         # Catching any other exceptions and providing a message
