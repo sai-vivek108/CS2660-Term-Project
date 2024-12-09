@@ -19,14 +19,14 @@ def add_session(session_id, course_name, date):
         })
     return {"message": "Session added successfully!"}, 200
 
-def record_attendance(session_id, student_id, name, present):
+def record_attendance(session_id, student_id, present):
     attendance_ref = db.collection('Sessions').document(f"Session_{session_id}").collection('Attendance').document(f"Student_{student_id}")
     if attendance_ref.get().exists:
         return {"message": "Attendance already recorded"}, 400
     else:
         attendance_ref.set({
             "student_id": student_id,
-            "name": name,# can be optional
+            # "name": name,# can be optional
             "present": present,
             "timestamp": firestore.SERVER_TIMESTAMP
         })

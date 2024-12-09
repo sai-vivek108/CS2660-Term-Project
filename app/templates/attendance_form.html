@@ -61,12 +61,20 @@
 <body>
     <div class="container">
         <h1>Submit Attendance for {{ current_date }}</h1>
+        
+        <form method="POST" action="/submit_attendance">
+            <input type="hidden" id="session_id" name="session_id" value="{{ session_id }}">
+            <div class="input-container">
+                <input type="text" id="student_id" name="student_id" placeholder="Enter your Student ID" required>
+            </div>
+            <button type="submit">Submit</button>
+        </form>        
 
-        <div class="input-container">
+        <!-- <div class="input-container">
             <input type="text" id="student_id" name="student_id" placeholder="Enter your Student ID" required>
         </div>
 
-        <button onclick="submitAttendance()">Submit</button>
+        <button onclick="submitAttendance()">Submit</button> -->
     </div>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
