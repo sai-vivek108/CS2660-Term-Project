@@ -1,7 +1,7 @@
 from flask import request, jsonify, render_template
 from google.cloud import firestore
 from app.qr_utils import generate_qr_code
-from app.models import add_session
+from app.models import add_session, record_attendance
 from google.cloud import storage
 from datetime import datetime
 
@@ -28,7 +28,7 @@ def setup_routes(app):
         
         # Add session to Firestore
         ### Commented bc firestone isn't set up yet
-        #add_session(session_id, course_name, date)
+        add_session(session_id, course_name, date)
         
         # Generate QR code
         response, status = generate_qr_code(session_id)
@@ -59,24 +59,15 @@ def setup_routes(app):
             session_id = request.form.get('session_id')
             student_id = request.form.get('student_id')
             name = request.form.get('name', '')  # Optional
+            present = True #since student scanned the QR
     
             if not session_id or not student_id:
                 return jsonify({"error": "Session ID and Student ID are required"}), 400
     
-            # Check for existing attendance record
-            attendance_ref = db.collection('Sessions').document(f"Session_{session_id}").collection('Attendance').document(f"Student_{student_id}")
-            if attendance_ref.get().exists:
-                return jsonify({"message": "Attendance already recorded for this student"}), 400
+            # Record the attendance 
+            response, status_code = record_attendance(session_id, student_id, name, present)
     
-            # Store attendance in Firestore
-            attendance_ref.set({
-                "student_id": student_id,
-                "name": name,
-                "present": True,  # Default to True since they filled the form
-                "timestamp": firestore.SERVER_TIMESTAMP
-            })
-    
-            return jsonify({"message": "Attendance recorded successfully!"}), 200
+            return jsonify(response), status_code
     
         except Exception as e:
             return jsonify({"error": str(e)}), 500

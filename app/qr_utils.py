@@ -18,7 +18,7 @@ def generate_qr_code(session_id):
         
         # session_id = f"session-{datetime.now().strftime('%Y-%m-%d')}"
         # this needs to direct the student to the attendance form.
-        qr_content = f"http://127.0.0.1:5000/attendance/form/{session_id}"
+        qr_content = f"{request.host_url}attendance/form/{session_id}"
 
         # Generate QR code
         qr = qrcode.QRCode(version=1, box_size=10, border=4)
@@ -48,6 +48,8 @@ def generate_qr_code(session_id):
             blob = bucket.blob(f"{session_id}.png")
             blob.upload_from_filename(qr_file_path)
 
+            # cleaning up
+            os.unlink(qr_file_path)
             return f"QR Code generated successfully: {blob.public_url}", 200
 
     except Exception as e:
