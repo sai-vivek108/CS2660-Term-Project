@@ -6,7 +6,7 @@ from google.oauth2 import service_account
 # credentials = service_account.Credentials.from_service_account_file(service_account_path)
 db = firestore.Client(project='clear-practice-435922-q9')
 
-
+# test
 def add_session(session_id, course_name, date):
     session_ref = db.collection('Sessions').document(f"Session_{session_id}")
     session_ref.set({
