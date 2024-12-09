@@ -31,7 +31,7 @@ def setup_routes(app):
         
         # Add session to Firestore
         ### Commented bc firestone isn't set up yet
-        add_session(session_id, course_name, current_date)
+        # add_session(session_id, course_name, current_date)
         
         # Generate QR code
         response, status = generate_qr_code(session_id)
