@@ -3,6 +3,7 @@ from datetime import datetime
 from google.cloud import storage
 import os
 import tempfile
+from flask import request
 
 BUCKET_NAME = "qr-attendance-bucket"
 

@@ -45,7 +45,7 @@ def setup_routes(app):
     def display_qrCode():
         try:
             current_date, session_id, _ = get_session_details()
-            qr_url = f"https://storage.googleapis.com/qr-attendance-bucket-griffin/{session_id}.png"
+            qr_url = f"https://storage.googleapis.com/qr-attendance-bucket/{session_id}.png"
             
             return render_template('qrCode.html', qr_url=qr_url, session_id=session_id, current_date=current_date)
         
