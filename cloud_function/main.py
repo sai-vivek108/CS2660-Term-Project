@@ -51,8 +51,6 @@ def generate_qr_code(session_id, course_name):
 # generate_qr_code(1)
 @functions_framework.cloud_event
 def scheduled_qr_generator(cloud_event):
-@functions_framework.cloud_event
-def scheduled_qr_generator(cloud_event):
     """
     Cloud Function triggered by Pub/Sub for scheduled QR code generation.
     """
