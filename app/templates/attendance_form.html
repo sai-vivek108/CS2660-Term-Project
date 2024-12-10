@@ -64,12 +64,14 @@
         
         <form method="POST" action="/submit_attendance">
             <input type="hidden" id="session_id" name="session_id" value="{{ session_id }}">
+            <input type="hidden" id="course_name" name="course_name" value="{{ course_name }}">
+
             <div class="input-container">
                 <input type="text" id="student_id" name="student_id" placeholder="Enter your Student ID" required>
             </div>
-            <div class="input-container">
+            <!-- <div class="input-container">
                 <input type="text" id="course_name" name="course_name" placeholder="Enter course name" required>
-            </div>
+            </div> -->
             <button type="submit">Submit</button>
         </form>        
 

@@ -4,10 +4,11 @@ from google.cloud import storage
 import os
 import tempfile
 from flask import request
+import functions_framework
 
 BUCKET_NAME = "qr-attendance-bucket"
 
-def generate_qr_code():
+def generate_qr_code(session_id, course_name):
     try:
         # service_account_key_path = r"clear-practice-435922-q9-66e79325057d.json"
         # if not os.path.exists(service_account_key_path):
@@ -47,7 +48,8 @@ def generate_qr_code():
         # Catching any other exceptions and providing a message
         return f"An error occurred: {str(e)}", 500
 # generate_qr_code(1)
-def scheduled_qr_generator(event, context):
+@functions_framework.cloud_event
+def scheduled_qr_generator(cloud_event):
     current_time = datetime.utcnow()
     sessions_ref = db.collection("Sessions")
     sessions = sessions_ref.stream()
