@@ -1,10 +1,11 @@
 import qrcode
 from datetime import datetime, timedelta
-from google.cloud import storage
+from google.cloud import storage, firestore
 import os
 import tempfile
 from flask import request
 import functions_framework
+
 
 BUCKET_NAME = "qr-attendance-bucket"
 
@@ -50,6 +51,7 @@ def generate_qr_code(session_id, course_name):
 # generate_qr_code(1)
 @functions_framework.cloud_event
 def scheduled_qr_generator(cloud_event):
+    db = firestore.Client()  # Initialize Firestore client
     current_time = datetime.utcnow()
     sessions_ref = db.collection("Sessions")
     sessions = sessions_ref.stream()
