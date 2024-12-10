@@ -51,43 +51,57 @@ def generate_qr_code(session_id, course_name):
 # generate_qr_code(1)
 @functions_framework.cloud_event
 def scheduled_qr_generator(cloud_event):
-    db = firestore.Client()  # Initialize Firestore client
-    current_time = datetime.utcnow()
-    sessions_ref = db.collection("Sessions")
-    sessions = sessions_ref.stream()
+@functions_framework.cloud_event
+def scheduled_qr_generator(cloud_event):
+    """
+    Cloud Function triggered by Pub/Sub for scheduled QR code generation.
+    """
+    try:
+        # Parse the Pub/Sub message
+        data = cloud_event.data
+        print(f"Pub/Sub message received: {data}")
 
-    for session in sessions:
-        session_data = session.to_dict()
-        session_id = session.id
-        course_name = session_data.get("course_name")
-        start_date = session_data.get("start_date")
+        # Initialize Firestore client
+        db = firestore.Client()
+        current_time = datetime.utcnow()
+        sessions_ref = db.collection("Sessions")
+        sessions = sessions_ref.stream()
 
-        if not start_date:
-            continue
+        for session in sessions:
+            session_data = session.to_dict()
+            session_id = session.id
+            course_name = session_data.get("course_name")
+            start_date = session_data.get("start_date")
 
-        start_date = start_date.to_datetime()
+            if not start_date:
+                continue
 
-        next_qr_time = start_date
-        while next_qr_time < current_time:
-            next_qr_time += timedelta(days=1)
+            # Convert Firestore timestamp to datetime
+            start_date = start_date.replace(tzinfo=None)
+            next_qr_time = start_date
+            while next_qr_time < current_time:
+                next_qr_time += timedelta(days=1)
 
-        if current_time >= next_qr_time - timedelta(minutes=5):
-            qr_url = generate_qr_code(session_id, course_name)
-            # print(f"Generated QR code for session {session_id}: {qr_url}")
+            if current_time >= next_qr_time - timedelta(minutes=5):
+                qr_url = generate_qr_code(session_id, course_name)
+                print(f"Generated QR code for session {session_id}: {qr_url}")
 
-            # Copy student fields from `Students` subcollection
-            students_ref = db.collection("Sessions").document(course_name).collection("Students")
-            students = students_ref.stream()
+                # Copy student fields from `Students` subcollection
+                students_ref = db.collection("Sessions").document(course_name).collection("Students")
+                students = students_ref.stream()
 
-            for student in students:
-                student_data = student.to_dict()
-                student_id = student_data.get("student_id")
+                for student in students:
+                    student_data = student.to_dict()
+                    student_id = student_data.get("student_id")
 
-                # Add student to the session's attendance subcollection
-                attendance_ref = db.collection("Sessions").document(course_name).collection(session_id).document(f"Student_{student_id}")
-                attendance_ref.set({
-                    "student_id": student_id,
-                    # "name": student_data.get("name", ""),  # Optional
-                    "present": False,
-                    "timestamp": ""
-                })
+                    # Add student to the session's attendance subcollection
+                    attendance_ref = db.collection("Sessions").document(course_name).collection(session_id).document(f"Student_{student_id}")
+                    attendance_ref.set({
+                        "student_id": student_id,
+                        # "name": student_data.get("name", ""),  # Optional
+                        "present": False,
+                        "timestamp": ""
+                    })
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
