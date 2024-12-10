@@ -8,7 +8,7 @@ db = firestore.Client(project='cs1660')
 
 # test
 def add_session(session_id, course_name, date):
-    session_ref = db.collection('Sessions').document(f"Session_{session_id}")
+    session_ref = db.collection('cs1660').document(f"Session_{session_id}")
     if session_ref.get().exists:
         return {"message": "Attendance already recorded"}, 400
     else:
