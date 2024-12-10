@@ -7,22 +7,22 @@ from google.oauth2 import service_account
 db = firestore.Client(project='clear-practice-435922-q9')
 
 # test
-def add_session(session_id, course_name, date):
-    session_ref = db.collection('cs1660').document(f"Session_{session_id}")
-    if session_ref.get().exists:
-        return {"message": "Attendance already recorded"}, 400
-    else:
-        session_ref.set({
-            "session_id": session_id,
-            "course_name": course_name,
-            "date": date,
-        })
-    return {"message": "Session added successfully!"}, 200
+# def add_session(session_id, course_name, date):
+#     session_ref = db.collection().document(f"{session_id}")
+#     if session_ref.get().exists:
+#         return {"message": "Session already recorded"}, 400
+#     else:
+#         session_ref.set({
+#             "session_id": session_id,
+#             "course_name": course_name,
+#             "date": date,
+#         })
+#     return {"message": "Session added successfully!"}, 200
 
-def record_attendance(session_id, student_id, present):
-    attendance_ref = db.collection('Sessions').document(f"Session_{session_id}").collection('Attendance').document(f"Student_{student_id}")
+def record_attendance(session_id, student_id, course_name, present):
+    attendance_ref = db.collection('Sessions').document(f"{course_name}").collection("{session_id}").document(f"Student_{student_id}")
     if attendance_ref.get().exists:
-        return {"message": "Attendance already recorded"}, 400
+        return {"message": f"{attendance_ref.path}"}, 400
     else:
         attendance_ref.set({
             "student_id": student_id,

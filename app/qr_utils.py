@@ -57,3 +57,43 @@ def generate_qr_code(session_id):
         # Catching any other exceptions and providing a message
         return f"An error occurred: {str(e)}", 500
 # generate_qr_code(1)
+def scheduled_qr_generator(event, context):
+    current_time = datetime.utcnow()
+    sessions_ref = db.collection("Sessions")
+    sessions = sessions_ref.stream()
+
+    for session in sessions:
+        session_data = session.to_dict()
+        session_id = session.id
+        course_name = session_data.get("course_name")
+        start_date = session_data.get("start_date")
+
+        if not start_date:
+            continue
+
+        start_date = start_date.to_datetime()
+
+        next_qr_time = start_date
+        while next_qr_time < current_time:
+            next_qr_time += timedelta(days=1)
+
+        if current_time >= next_qr_time - timedelta(minutes=5):
+            qr_url = generate_qr_code(session_id, course_name)
+            # print(f"Generated QR code for session {session_id}: {qr_url}")
+
+            # Copy student fields from `Students` subcollection
+            students_ref = db.collection("Sessions").document(course_name).collection("Students")
+            students = students_ref.stream()
+
+            for student in students:
+                student_data = student.to_dict()
+                student_id = student_data.get("student_id")
+
+                # Add student to the session's attendance subcollection
+                attendance_ref = db.collection("Sessions").document(course_name).collection(session_id).document(f"Student_{student_id}")
+                attendance_ref.set({
+                    "student_id": student_id,
+                    # "name": student_data.get("name", ""),  # Optional
+                    "present": False,
+                    "timestamp": ""
+                })
