@@ -1,6 +1,5 @@
 from flask import request, jsonify, render_template
 from google.cloud import firestore
-from app.qr_utils import generate_qr_code
 from app.models import record_attendance
 from google.cloud import storage
 from datetime import datetime
