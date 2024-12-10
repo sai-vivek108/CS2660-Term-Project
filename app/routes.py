@@ -39,7 +39,7 @@ def setup_routes(app):
 
     @app.route('/attendance/form/<session_id>', methods=['GET'])
     def attendance_form(session_id):
-        return render_template('attendance_form.html', current_date=session_id.split("session-")[1])
+        return render_template('attendance_form.html', current_date=session_id.split("session-")[1], session_id= session_id)
 
     @app.route('/qrCode', methods=['GET'])
     def display_qrCode():
