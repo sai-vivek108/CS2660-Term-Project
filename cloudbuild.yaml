@@ -22,5 +22,5 @@ steps:
          '--trigger-topic', 'generate-qr-codes',
          '--entry-point', 'scheduled_qr_generator',
          '--region', 'us-central1',
-         '--source', '.',
+         '--source', './cloud_function',
          '--allow-unauthenticated']

@@ -24,17 +24,6 @@ def setup_routes(app):
         _, session_id, _ = get_session_details()
         return render_template('home.html')
 
-    @app.route('/generate', methods=['POST'])
-    def generate():
-        current_date, session_id, course_name = get_session_details()
-
-        if not session_id or not course_name or not current_date:
-            return jsonify({"error": "Missing required fields"}), 400
-        
-        # Generate QR code
-        response, status = generate_qr_code(session_id)
-        return jsonify({"message": response}), status
-
     @app.route('/attendance/form/<session_id>', methods=['GET'])
     def attendance_form(session_id):
         return render_template('attendance_form.html', current_date=session_id.split("session-")[1], session_id= session_id)
@@ -45,7 +34,7 @@ def setup_routes(app):
             current_date, session_id, _ = get_session_details()
             qr_url = f"https://storage.googleapis.com/qr-attendance-bucket/{session_id}.png"
             
-            return render_template('qrCode.html', qr_url=qr_url, session_id=session_id, current_date=current_date)
+            return render_template('qrCode.html', qr_url=qr_url, current_date=current_date)
         
         except Exception as e:
             return jsonify({"error": str(e)}), 500
