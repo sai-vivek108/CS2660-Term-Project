@@ -20,7 +20,6 @@ def get_session_details():
 def setup_routes(app):
     @app.route('/')
     def home():
-        _, session_id, _ = get_session_details()
         return render_template('home.html')
 
     @app.route('/attendance/form/<session_id>/<course_name>', methods=['GET'])
@@ -42,7 +41,7 @@ def setup_routes(app):
     def submit_attendance():
         try:
             # Get form data
-            session_id = request.form.get('session_id')
+            _, session_id, _ = get_session_details()
             student_id = request.form.get('student_id')
             course_name = request.form.get('course_name')
             present = True  # Since student scanned the QR
