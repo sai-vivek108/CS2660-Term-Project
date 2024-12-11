@@ -20,9 +20,9 @@ db = firestore.Client(project='clear-practice-435922-q9')
 #     return {"message": "Session added successfully!"}, 200
 
 def record_attendance(session_id, student_id, course_name, present):
-    attendance_ref = db.collection('Sessions').document(f"{course_name}").collection("{session_id}").document(f"Student_{student_id}")
+    attendance_ref = db.collection('Sessions').document(f"{course_name}").collection(f"{session_id}").document(f"Student_{student_id}")
     if attendance_ref.get().exists:
-        return {"message": f"{attendance_ref.path}"}, 400
+        return {"message": "Attendance already recorded"}, 400
     else:
         attendance_ref.set({
             "student_id": student_id,
