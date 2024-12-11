@@ -76,10 +76,7 @@ def setup_routes(app):
                 record = doc.to_dict()
                 attendance_records.append(record)
 
-            return jsonify({
-                "session_id": session_id,
-                "attendance_records": attendance_records,
-            }), 200
+            return render_template('attendance.html', session_id=session_id, attendance_records=attendance_records)
 
         except Exception as e:
             return jsonify({"error": str(e)}), 500
