@@ -46,15 +46,18 @@ def setup_routes(app):
             present = True  # Since student scanned the QR
     
             if not session_id or not student_id:
-                return jsonify({"error": "Session ID and Student ID are required"}), 400
+                return render_template('attendance_result.html', success=False, message="Session ID and Student ID are required.")
     
             # Record the attendance 
             response, status_code = record_attendance(session_id, student_id, course_name, present)
     
-            return jsonify(response), status_code
+            if status_code == 200:
+                return render_template('attendance_result.html', success=True, message=response.get('message', 'Attendance recorded successfully'))
+            else:
+                return render_template('attendance_result.html', success=False, message=response.get('error', 'An error occurred.'))
     
         except Exception as e:
-            return jsonify({"error": str(e)}), 500
+            return render_template('attendance_result.html', success=False, message=f"An error occurred: {str(e)}")
 
     @app.route('/attendance', methods=['GET'])
     def get_attendance():
@@ -99,7 +102,7 @@ def setup_routes(app):
             course_name = request.form.get('course_name')
             start_date_str = request.form.get('start_date')  # 'YYYY-MM-DDTHH:MM' format
             if not course_name or not start_date_str:
-                return jsonify({"error": "Course name and start date are required"}), 400
+                return render_template('upload_result.html', success=False, message="Course name and start date are required.")
             
             # Convert start_date to a datetime object
             start_date = datetime.strptime(start_date_str, '%Y-%m-%dT%H:%M')
@@ -107,12 +110,12 @@ def setup_routes(app):
             # Validate that start_date is in the future
             current_time = datetime.utcnow()
             if start_date <= current_time:
-                return jsonify({"error": "Start date must be greater than the current time"}), 400
+                return render_template('upload_result.html', success=False, message="Start date must be greater than the current time.")
 
             # Get the uploaded file
             file = request.files.get('file')
             if not file:
-                return jsonify({"error": "CSV file is required"}), 400
+                return render_template('upload_result.html', success=False, message="CSV file is required")
 
             # Parse the CSV file
             student_ids = []
@@ -133,9 +136,7 @@ def setup_routes(app):
                 student_ref = course_ref.collection('Students').document(student_id)
                 student_ref.set({"student_id": student_id})
 
-            return jsonify({
-                "message": f"Successfully added {len(student_ids)} students to course {course_name} with start date {start_date}"
-            }), 200
+            return render_template('upload_result.html', success=True, message=f"Successfully added {len(student_ids)} students to course {course_name} with start date {start_date}")
 
         except Exception as e:
-            return jsonify({"error": str(e)}), 500
+            return render_template('upload_result.html', success=False, message=f"An error occurred: {str(e)}")
