@@ -7,14 +7,13 @@ import csv
 
 BUCKET_NAME = "qr-attendance-bucket"
 
-db = firestore.Client()  # Initialize Firestore client
 
 # helper function
 def get_session_details():
     
     current_date = datetime.now().strftime('%Y-%m-%d')
     session_id = f"session-{current_date}"
-    course_name = "CS1660"
+    course_name = "cs1660"
     return current_date, session_id, course_name
 
 def setup_routes(app):
@@ -62,6 +61,7 @@ def setup_routes(app):
         """
         Fetch attendance records for a specific session.
         """
+        db = firestore.Client()  # Initialize Firestore client
         _,session_id,course_name = get_session_details()      
         try:
             # print("At DB collections: \t", db.collection('Sessions'))
@@ -72,9 +72,7 @@ def setup_routes(app):
 
             # Compile attendance data into a list
             attendance_records = []
-            # print("At attendance docs \t:", attendance_docs)
             for doc in attendance_docs:
-                # print(doc)
                 record = doc.to_dict()
                 attendance_records.append(record)
 
@@ -98,6 +96,7 @@ def setup_routes(app):
         """
         Handle CSV upload, process student IDs, and store them in Firestore.
         """
+        db = firestore.Client()  # Initialize Firestore client
         try:
             # Get course_name and start_date from the form
             course_name = request.form.get('course_name')
