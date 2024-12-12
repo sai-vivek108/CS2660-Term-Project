@@ -1,8 +1,9 @@
 ﻿**CS1660 Final Project Workflow**
 
-Website URL : [https://cs1660-term-project-663294651398.us-central1.run.app/ ](https://cs1660-term-project-663294651398.us-central1.run.app/)Git Repo URL: <https://github.com/naruto-sai/CS1660-Term-Project>
+Website URL : [https://cs1660-term-project-663294651398.us-central1.run.app/ ](https://cs1660-term-project-663294651398.us-central1.run.app/)
+Git Repo URL: <https://github.com/naruto-sai/CS1660-Term-Project>
 
-1. Uploading the CSV File
+## 1. Uploading the CSV File
   - Task:
     - The instructor uploads a CSV file containing:
       - Student IDs
@@ -13,7 +14,7 @@ Website URL : [https://cs1660-term-project-663294651398.us-central1.run.app/ ](h
     - The CSV upload triggers a backend function to parse the file and store the data in Firestore.
   - Deliverable:
     - Student IDs, course name, and start date are saved in Firestore under the relevant course/session structure.
-2. QR Code Generation
+## 2. QR Code Generation
   - Task:
     - A scheduled function is triggered 10-15 minutes before the start time.
     - The function:
@@ -26,7 +27,7 @@ Website URL : [https://cs1660-term-project-663294651398.us-central1.run.app/ ](h
   - Deliverable:
     - A QR code is generated, uploaded, and associated with the session in the database.
     - A new session instance is created with all students’ attendance set to false.
-3. Marking Attendance
+## 3. Marking Attendance
   - Task:
     - Students scan the QR code using a front-end interface.
     - They enter their student ID and submit it.
@@ -35,7 +36,7 @@ Website URL : [https://cs1660-term-project-663294651398.us-central1.run.app/ ](h
     - Frontend Action: API is triggered when the student submits their ID.
   - Deliverable:
     - The student’s attendance for the session is updated to true in Firestore.
-4. Displaying Attendance
+## 4. Displaying Attendance
   - Task:
     - A function (get\_attendance) retrieves and displays the attendance data for the session, showing:
         - All student IDs.
@@ -44,7 +45,7 @@ Website URL : [https://cs1660-term-project-663294651398.us-central1.run.app/ ](h
     - Manual Query: This is triggered on-demand via the instructor’s dashboard or an API request.
   - Deliverable:
     - A list of all students and their attendance status for the session.
-4. Rebuilding on New Commits
+## 5. Rebuilding on New Commits
   - Task:
     - Use Cloud Build to automatically rebuild and redeploy the backend and frontend whenever a new commit is pushed to the GitHub repository.
   - Trigger:
@@ -52,9 +53,9 @@ Website URL : [https://cs1660-term-project-663294651398.us-central1.run.app/ ](h
   - Deliverable:
     - The application is rebuilt and deployed automatically.
 
-Triggers
+## Triggers
 
-Trigger 1: Scheduled QR Code Generation
+### Trigger 1: Scheduled QR Code Generation
 
   - What Happens:
     - Cloud Scheduler triggers the QR code generation function 10-15 minutes before the course start time.
@@ -64,7 +65,7 @@ Trigger 1: Scheduled QR Code Generation
   - Google Cloud Functions
   - Firestore Database
 
-Trigger 2: Rebuild on New Commits
+### Trigger 2: Rebuild on New Commits
 
   - What Happens:
     - Cloud Build detects a new commit to the GitHub repository.
