@@ -1,6 +1,7 @@
-﻿**CS1660 Final Project Workflow**
+﻿# CS1660 Final Project Workflow
 
 Website URL : [https://cs1660-term-project-663294651398.us-central1.run.app/ ](https://cs1660-term-project-663294651398.us-central1.run.app/)
+
 Git Repo URL: <https://github.com/naruto-sai/CS1660-Term-Project>
 
 ## 1. Uploading the CSV File
