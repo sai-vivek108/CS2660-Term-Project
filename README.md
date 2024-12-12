@@ -27,30 +27,30 @@ Website URL : [https://cs1660-term-project-663294651398.us-central1.run.app/ ](h
     - A QR code is generated, uploaded, and associated with the session in the database.
     - A new session instance is created with all students’ attendance set to false.
 3. Marking Attendance
-   - Task:
-      - Students scan the QR code using a front-end interface.
-      - They enter their student ID and submit it.
-      - The backend API validates the session ID and student ID and updates the database to mark the student’s attendance as true.
-   - Trigger:
-      - Frontend Action: API is triggered when the student submits their ID.
-   - Deliverable:
-      - The student’s attendance for the session is updated to true in Firestore.
+  - Task:
+    - Students scan the QR code using a front-end interface.
+    - They enter their student ID and submit it.
+    - The backend API validates the session ID and student ID and updates the database to mark the student’s attendance as true.
+  - Trigger:
+    - Frontend Action: API is triggered when the student submits their ID.
+  - Deliverable:
+    - The student’s attendance for the session is updated to true in Firestore.
 4. Displaying Attendance
-   - Task:
-      - A function (get\_attendance) retrieves and displays the attendance data for the session, showing:
-         - All student IDs.
-         - Their current attendance status (true or false).
-   - Trigger:
-      - Manual Query: This is triggered on-demand via the instructor’s dashboard or an API request.
-   - Deliverable:
-      - A list of all students and their attendance status for the session.
+  - Task:
+    - A function (get\_attendance) retrieves and displays the attendance data for the session, showing:
+        - All student IDs.
+        - Their current attendance status (true or false).
+  - Trigger:
+    - Manual Query: This is triggered on-demand via the instructor’s dashboard or an API request.
+  - Deliverable:
+    - A list of all students and their attendance status for the session.
 4. Rebuilding on New Commits
-   - Task:
-      - Use Cloud Build to automatically rebuild and redeploy the backend and frontend whenever a new commit is pushed to the GitHub repository.
-   - Trigger:
-      - Cloud Build Trigger: Initiated on each new commit.
-   - Deliverable:
-      - The application is rebuilt and deployed automatically.
+  - Task:
+    - Use Cloud Build to automatically rebuild and redeploy the backend and frontend whenever a new commit is pushed to the GitHub repository.
+  - Trigger:
+    - Cloud Build Trigger: Initiated on each new commit.
+  - Deliverable:
+    - The application is rebuilt and deployed automatically.
 
 Triggers
 
