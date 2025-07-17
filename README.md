@@ -1,4 +1,4 @@
-﻿# CS1660 Final Project Workflow
+﻿# Automated Attendance and Session Management Workflow
 
 Website URL : [https://cs1660-term-project-663294651398.us-central1.run.app/ ](https://cs1660-term-project-663294651398.us-central1.run.app/)
 
