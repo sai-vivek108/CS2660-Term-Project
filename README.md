@@ -2,7 +2,10 @@
 
 Website URL : [https://cs1660-term-project-663294651398.us-central1.run.app/ ](https://cs1660-term-project-663294651398.us-central1.run.app/)
 
-Git Repo URL: <https://github.com/naruto-sai/CS1660-Term-Project>
+Git Repo URL: <https://github.com/naruto-sai/CS2660-Term-Project>
+
+## DEMO
+https://sai-vivek108.github.io/CS2660-Term-Project/media/demo.mp4
 
 ## 1. Uploading the CSV File
   - Task:
